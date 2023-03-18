@@ -1,0 +1,7 @@
+com/pe/screenplaybdd/tasks/DeleteUser.class
+com/pe/screenplaybdd/tasks/UpdateUser.class
+com/pe/screenplaybdd/tasks/CreateUser.class
+com/pe/screenplaybdd/model/User.class
+com/pe/screenplaybdd/model/UserResponse.class
+com/pe/screenplaybdd/endpoints/UserEndpoints.class
+com/pe/screenplaybdd/questions/theUser.class
