@@ -1,0 +1,46 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+  workflow_dispatch:
+    inputs:
+      createUsers:
+        description: 'Crear usuario'
+        required: true
+        default: '@create'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref=='master'}}
+      name: Ejecucion e integracion de pruebas
+      run: mvn clean verify -Dcucumber.filter.tags="@create"
+    - if: ${{ github.event_name == 'workflow_dispatch'}}
+      name: Ejecucion e integracion de pruebas
+      run: mvn clean verify -Dcucumber.filter.tags=${{github.event.inputs.createUsers}}
+    
+    - name: Upload Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: TestResults
+        path: |
+            ./target/site/serenity/
